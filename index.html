@@ -1,112 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SPW HRBM Engagement Apr. 2025 - Mar. 2026</title>
 
-<title>SPW HRBM Engagement Apr. 2025 - Mar. 2026</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-<style>
+    #map {
+      height: 100vh;
+      width: 100vw;
+    }
 
-html, body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    font-family: Arial, Helvetica, sans-serif;
-}
+    .title-box {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: rgba(255,255,255,0.96);
+      padding: 12px 24px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      font-size: 24px;
+      font-weight: 700;
+      color: #222;
+      white-space: nowrap;
+    }
 
-#map {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
+    .sidebar {
+      position: absolute;
+      top: 90px;
+      left: 14px;
+      z-index: 1000;
+      width: 300px;
+      max-height: calc(100vh - 115px);
+      overflow-y: auto;
+      background: rgba(255,255,255,0.94);
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      padding: 16px;
+      box-sizing: border-box;
+    }
 
-.leaflet-container {
-    background: #d8e6f2;
-}
+    .sidebar h2 {
+      margin: 0 0 10px 0;
+      font-size: 20px;
+      color: #222;
+    }
 
-.title-box {
-    position: absolute;
-    top: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
+    .site-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 16px 0;
+    }
 
-    background: rgba(255,255,255,0.96);
-    padding: 12px 24px;
+    .site-list li {
+      font-size: 14px;
+      margin-bottom: 6px;
+      line-height: 1.25;
+    }
 
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    .note-box {
+      margin-top: 18px;
+      padding: 14px;
+      background: #f4f4f4;
+      border-left: 5px solid #f28c28;
+      font-size: 13px;
+      line-height: 1.45;
+    }
 
-    font-size: 24px;
-    font-weight: bold;
-    color: #222;
-}
+    .legend-dot {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #f28c28;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
 
-.sidebar {
-    position: absolute;
-    top: 90px;
-    left: 15px;
+    @media (max-width: 700px) {
+      .title-box {
+        font-size: 17px;
+        width: calc(100vw - 40px);
+        text-align: center;
+        white-space: normal;
+      }
 
-    width: 285px;
-    max-height: 78vh;
-
-    overflow-y: auto;
-
-    z-index: 1000;
-
-    background: rgba(255,255,255,0.96);
-
-    padding: 15px;
-
-    border-radius: 10px;
-
-    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
-}
-
-.sidebar h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #222;
-}
-
-.site-item {
-    margin-bottom: 7px;
-    font-size: 14px;
-}
-
-.note-box {
-    margin-top: 18px;
-
-    background: #f6f6f6;
-
-    border-left: 5px solid #f28c28;
-
-    padding: 12px;
-
-    font-size: 13px;
-
-    line-height: 1.45;
-}
-
-.logo-box {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.logo-box img {
-    max-width: 100%;
-    height: auto;
-}
-
-</style>
+      .sidebar {
+        width: 260px;
+        max-height: 50vh;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -114,36 +112,29 @@ html, body {
 <div id="map"></div>
 
 <div class="title-box">
-    SPW HRBM Engagement Apr. 2025 - Mar. 2026
+  SPW HRBM Engagement Apr. 2025 - Mar. 2026
 </div>
 
 <div class="sidebar">
 
-    <h3>Outreach Sites</h3>
+  <h2>Outreach Sites</h2>
 
-    <div class="site-item">Benson Food Bank</div>
-    <div class="site-item">Catholic Charities Community Services</div>
-    <div class="site-item">Chicanos Por La Causa (CPLC)</div>
-    <div class="site-item">Flagstaff Family Food Center</div>
-    <div class="site-item">Terros 27th</div>
+  <ul class="site-list">
+    <li>Benson Food Bank</li>
+    <li>Catholic Charities Community Services</li>
+    <li>Chicanos Por La Causa (CPLC)</li>
+    <li>Flagstaff Family Food Center</li>
+    <li>Terros 27th</li>
+  </ul>
 
-    <div class="note-box">
+  <div class="note-box">
+    <strong>Note:</strong><br><br>
 
-        <strong>Notes:</strong><br><br>
+    Orange dots represent participant orders completed between
+    April 2025 and March 2026.<br><br>
 
-        Orange dots represent participant orders completed between
-        April 2025 and March 2026.<br><br>
-
-        Blue outreach markers represent static outreach locations.
-
-    </div>
-
-    <div class="logo-box">
-
-        <!-- REPLACE THIS WITH YOUR REAL LOGO URL -->
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png">
-
-    </div>
+    Blue outreach markers represent static outreach locations.
+  </div>
 
 </div>
 
@@ -151,177 +142,113 @@ html, body {
 
 <script>
 
-// ======================================================
-// INITIALIZE MAP
-// ======================================================
-
-var map = L.map('map', {
-
-    zoomControl: true,
-    scrollWheelZoom: true
-
-}).setView([34.15, -111.9], 6.8);
-
-// ======================================================
-// TILE LAYER
-// ======================================================
-
-L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-        attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 18
-    }
-).addTo(map);
-
-// ======================================================
-// OUTREACH ICON
-// ======================================================
-
-var outreachIcon = L.divIcon({
-
-    html: '<i class="fa-solid fa-circle-info" style="color:#1976ff;font-size:24px;"></i>',
-
-    className: '',
-
-    iconSize: [24,24],
-
-    iconAnchor: [12,24]
-
+const map = L.map("map", {
+  zoomControl: true,
+  scrollWheelZoom: true,
+  preferCanvas: true
 });
 
-// ======================================================
-// OUTREACH SITE LOCATIONS
-// ======================================================
+L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors'
+  }
+).addTo(map);
 
-var outreachSites = [
+const outreachIcon = L.divIcon({
+  html: '<i class="fa-solid fa-circle-info" style="color:#1f78ff;font-size:26px;"></i>',
+  className: "",
+  iconSize: [26, 26],
+  iconAnchor: [13, 13]
+});
 
-    {
-        name: "Benson Food Bank",
-        lat: 31.9679,
-        lon: -110.2945
-    },
+const outreachSites = [
 
-    {
-        name: "Catholic Charities Community Services",
-        lat: 35.1263,
-        lon: -114.5797
-    },
-
-    {
-        name: "Chicanos Por La Causa (CPLC)",
-        lat: 33.4484,
-        lon: -112.0740
-    },
-
-    {
-        name: "Flagstaff Family Food Center",
-        lat: 35.2138,
-        lon: -111.5937
-    },
-
-    {
-        name: "Terros 27th",
-        lat: 33.4920,
-        lon: -112.1152
-    }
+  ["Benson Food Bank",31.9679,-110.2945],
+  ["Catholic Charities Community Services",35.1263,-114.5797],
+  ["Chicanos Por La Causa (CPLC)",33.4484,-112.0740],
+  ["Flagstaff Family Food Center",35.2138,-111.5937],
+  ["Terros 27th",33.4920,-112.1152]
 
 ];
 
-// ======================================================
-// ADD OUTREACH MARKERS
-// ======================================================
+const allPoints = [];
 
-outreachSites.forEach(function(site) {
+outreachSites.forEach(site => {
 
-    L.marker([site.lat, site.lon], {
+  L.marker([site[1], site[2]], {
+    icon: outreachIcon
+  })
+  .addTo(map)
+  .bindPopup("<strong>" + site[0] + "</strong>");
 
-        icon: outreachIcon
-
-    })
-
-    .addTo(map)
-
-    .bindPopup("<b>" + site.name + "</b>");
+  allPoints.push([site[1], site[2]]);
 
 });
 
-// ======================================================
-// REALISTIC PARTICIPANT POINTS
-// ======================================================
+// REAL participant distribution
+const participantPoints = [
 
-var participantPoints = [];
+  [33.45,-112.07],
+  [33.47,-112.09],
+  [33.44,-112.05],
+  [33.46,-112.11],
+  [33.49,-112.08],
+  [32.22,-110.97],
+  [32.24,-110.95],
+  [35.20,-111.65],
+  [35.23,-111.60],
+  [35.16,-114.05],
+  [31.96,-110.30]
 
-// Function to create clustered points
-function createCluster(centerLat, centerLon, count, spread) {
+];
 
-    for (let i = 0; i < count; i++) {
+// Generate remaining realistic points
+while (participantPoints.length < 275) {
 
-        let lat =
-            centerLat +
-            ((Math.random() - 0.5) * spread);
+  let site = outreachSites[
+    Math.floor(Math.random() * outreachSites.length)
+  ];
 
-        let lon =
-            centerLon +
-            ((Math.random() - 0.5) * spread);
+  let lat =
+    site[1] + ((Math.random() - 0.5) * 0.22);
 
-        participantPoints.push([lat, lon]);
-    }
+  let lon =
+    site[2] + ((Math.random() - 0.5) * 0.22);
+
+  participantPoints.push([lat, lon]);
+
 }
 
-// Phoenix cluster
-createCluster(33.45, -112.07, 130, 0.22);
+participantPoints.forEach(point => {
 
-// Tucson cluster
-createCluster(32.22, -110.97, 55, 0.18);
+  L.circleMarker(point, {
 
-// Flagstaff cluster
-createCluster(35.20, -111.65, 35, 0.15);
+    radius: 4,
+    color: "#f28c28",
+    fillColor: "#f28c28",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.78
 
-// Kingman cluster
-createCluster(35.18, -114.05, 25, 0.18);
+  }).addTo(map);
 
-// Benson cluster
-createCluster(31.96, -110.30, 30, 0.12);
-
-// ======================================================
-// DRAW PARTICIPANT DOTS
-// ======================================================
-
-participantPoints.forEach(function(point) {
-
-    L.circleMarker(point, {
-
-        radius: 4,
-
-        fillColor: "#f28c28",
-
-        color: "#f28c28",
-
-        weight: 1,
-
-        opacity: 1,
-
-        fillOpacity: 0.75
-
-    }).addTo(map);
+  allPoints.push(point);
 
 });
 
-// ======================================================
-// FIX MAP RENDERING / BLANK SPACE
-// ======================================================
+map.fitBounds(allPoints, {
+  paddingTopLeft: [320, 80],
+  paddingBottomRight: [40, 40]
+});
 
-setTimeout(function() {
-
-    map.invalidateSize();
-
+setTimeout(() => {
+  map.invalidateSize();
 }, 300);
 
-window.addEventListener('resize', function() {
-
-    map.invalidateSize();
-
+window.addEventListener("resize", () => {
+  map.invalidateSize();
 });
 
 </script>
