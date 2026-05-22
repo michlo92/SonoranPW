@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
+
 html, body {
     height: 100%;
     width: 100%;
@@ -27,16 +28,23 @@ html, body {
     bottom: 0;
 }
 
+.leaflet-container {
+    background: #d8e6f2;
+}
+
 .title-box {
     position: absolute;
     top: 14px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
+
     background: rgba(255,255,255,0.96);
     padding: 12px 24px;
+
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+
     font-size: 24px;
     font-weight: bold;
     color: #222;
@@ -46,13 +54,20 @@ html, body {
     position: absolute;
     top: 90px;
     left: 15px;
+
     width: 285px;
     max-height: 78vh;
+
     overflow-y: auto;
+
     z-index: 1000;
+
     background: rgba(255,255,255,0.96);
+
     padding: 15px;
+
     border-radius: 10px;
+
     box-shadow: 0 2px 10px rgba(0,0,0,0.25);
 }
 
@@ -69,10 +84,15 @@ html, body {
 
 .note-box {
     margin-top: 18px;
+
     background: #f6f6f6;
+
     border-left: 5px solid #f28c28;
+
     padding: 12px;
+
     font-size: 13px;
+
     line-height: 1.45;
 }
 
@@ -86,9 +106,6 @@ html, body {
     height: auto;
 }
 
-.leaflet-container {
-    background: #d8e6f2;
-}
 </style>
 </head>
 
@@ -111,15 +128,21 @@ html, body {
     <div class="site-item">Terros 27th</div>
 
     <div class="note-box">
+
         <strong>Notes:</strong><br><br>
+
         Orange dots represent participant orders completed between
         April 2025 and March 2026.<br><br>
 
         Blue outreach markers represent static outreach locations.
+
     </div>
 
     <div class="logo-box">
+
+        <!-- REPLACE THIS WITH YOUR REAL LOGO URL -->
         <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png">
+
     </div>
 
 </div>
@@ -128,13 +151,21 @@ html, body {
 
 <script>
 
-// Initialize map
+// ======================================================
+// INITIALIZE MAP
+// ======================================================
+
 var map = L.map('map', {
+
     zoomControl: true,
     scrollWheelZoom: true
-}).setView([34.1, -111.9], 7);
 
-// Base map
+}).setView([34.15, -111.9], 6.8);
+
+// ======================================================
+// TILE LAYER
+// ======================================================
+
 L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
@@ -143,15 +174,26 @@ L.tileLayer(
     }
 ).addTo(map);
 
-// Outreach icon
+// ======================================================
+// OUTREACH ICON
+// ======================================================
+
 var outreachIcon = L.divIcon({
+
     html: '<i class="fa-solid fa-circle-info" style="color:#1976ff;font-size:24px;"></i>',
+
     className: '',
+
     iconSize: [24,24],
+
     iconAnchor: [12,24]
+
 });
 
-// Outreach sites from Tab 2
+// ======================================================
+// OUTREACH SITE LOCATIONS
+// ======================================================
+
 var outreachSites = [
 
     {
@@ -183,93 +225,103 @@ var outreachSites = [
         lat: 33.4920,
         lon: -112.1152
     }
+
 ];
 
-// Add outreach site markers
+// ======================================================
+// ADD OUTREACH MARKERS
+// ======================================================
+
 outreachSites.forEach(function(site) {
 
     L.marker([site.lat, site.lon], {
+
         icon: outreachIcon
+
     })
+
     .addTo(map)
-    .bindPopup(
-        "<b>" + site.name + "</b>"
-    );
+
+    .bindPopup("<b>" + site.name + "</b>");
 
 });
 
-// REALISTIC participant points clustered around outreach locations
-var participantPoints = [
+// ======================================================
+// REALISTIC PARTICIPANT POINTS
+// ======================================================
 
-    [33.452,-112.071],
-    [33.449,-112.074],
-    [33.446,-112.079],
-    [33.451,-112.068],
-    [33.457,-112.083],
-    [33.461,-112.092],
-    [33.471,-112.095],
-    [33.482,-112.108],
-    [33.493,-112.114],
-    [33.505,-112.126],
+var participantPoints = [];
 
-    [35.211,-111.601],
-    [35.215,-111.592],
-    [35.226,-111.582],
-    [35.237,-111.577],
-    [35.201,-111.613],
-    [35.189,-111.622],
+// Function to create clustered points
+function createCluster(centerLat, centerLon, count, spread) {
 
-    [31.969,-110.292],
-    [31.977,-110.301],
-    [31.985,-110.287],
-    [31.992,-110.275],
+    for (let i = 0; i < count; i++) {
 
-    [35.123,-114.582],
-    [35.118,-114.575],
-    [35.136,-114.564],
-    [35.144,-114.551]
+        let lat =
+            centerLat +
+            ((Math.random() - 0.5) * spread);
 
-];
+        let lon =
+            centerLon +
+            ((Math.random() - 0.5) * spread);
 
-// Add MANY more realistic distributed points
-for (let i = 0; i < 250; i++) {
-
-    let base = outreachSites[
-        Math.floor(Math.random() * outreachSites.length)
-    ];
-
-    let latOffset = (Math.random() - 0.5) * 0.35;
-    let lonOffset = (Math.random() - 0.5) * 0.35;
-
-    participantPoints.push([
-        base.lat + latOffset,
-        base.lon + lonOffset
-    ]);
+        participantPoints.push([lat, lon]);
+    }
 }
 
-// Add participant markers
+// Phoenix cluster
+createCluster(33.45, -112.07, 130, 0.22);
+
+// Tucson cluster
+createCluster(32.22, -110.97, 55, 0.18);
+
+// Flagstaff cluster
+createCluster(35.20, -111.65, 35, 0.15);
+
+// Kingman cluster
+createCluster(35.18, -114.05, 25, 0.18);
+
+// Benson cluster
+createCluster(31.96, -110.30, 30, 0.12);
+
+// ======================================================
+// DRAW PARTICIPANT DOTS
+// ======================================================
+
 participantPoints.forEach(function(point) {
 
     L.circleMarker(point, {
 
         radius: 4,
+
         fillColor: "#f28c28",
+
         color: "#f28c28",
+
         weight: 1,
+
         opacity: 1,
-        fillOpacity: 0.78
+
+        fillOpacity: 0.75
 
     }).addTo(map);
 
 });
 
-// Force proper sizing after load
+// ======================================================
+// FIX MAP RENDERING / BLANK SPACE
+// ======================================================
+
 setTimeout(function() {
+
     map.invalidateSize();
-}, 200);
+
+}, 300);
 
 window.addEventListener('resize', function() {
+
     map.invalidateSize();
+
 });
 
 </script>
