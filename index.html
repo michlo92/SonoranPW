@@ -12,61 +12,68 @@
 <style>
 html, body {
     height: 100%;
+    width: 100%;
     margin: 0;
+    padding: 0;
+    overflow: hidden;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 #map {
-    width: 100%;
-    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .title-box {
     position: absolute;
-    top: 15px;
+    top: 14px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 999;
-    background: white;
-    padding: 12px 22px;
+    z-index: 1000;
+    background: rgba(255,255,255,0.96);
+    padding: 12px 24px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
     font-size: 24px;
     font-weight: bold;
-    color: #333;
+    color: #222;
 }
 
 .sidebar {
     position: absolute;
     top: 90px;
     left: 15px;
-    width: 280px;
-    max-height: 80vh;
+    width: 285px;
+    max-height: 78vh;
     overflow-y: auto;
-    background: white;
-    z-index: 999;
+    z-index: 1000;
+    background: rgba(255,255,255,0.96);
     padding: 15px;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
 }
 
 .sidebar h3 {
     margin-top: 0;
-    color: #333;
+    margin-bottom: 10px;
+    color: #222;
 }
 
 .site-item {
-    margin-bottom: 8px;
+    margin-bottom: 7px;
     font-size: 14px;
 }
 
 .note-box {
-    margin-top: 20px;
-    padding: 12px;
-    background: #f5f5f5;
+    margin-top: 18px;
+    background: #f6f6f6;
     border-left: 5px solid #f28c28;
+    padding: 12px;
     font-size: 13px;
-    line-height: 1.4;
+    line-height: 1.45;
 }
 
 .logo-box {
@@ -78,76 +85,99 @@ html, body {
     max-width: 100%;
     height: auto;
 }
+
+.leaflet-container {
+    background: #d8e6f2;
+}
 </style>
 </head>
 
 <body>
+
+<div id="map"></div>
 
 <div class="title-box">
     SPW HRBM Engagement Apr. 2025 - Mar. 2026
 </div>
 
 <div class="sidebar">
+
     <h3>Outreach Sites</h3>
 
     <div class="site-item">Benson Food Bank</div>
-    <div class="site-item">Chicanos Por La Causa (CPLC)</div>
     <div class="site-item">Catholic Charities Community Services</div>
+    <div class="site-item">Chicanos Por La Causa (CPLC)</div>
     <div class="site-item">Flagstaff Family Food Center</div>
     <div class="site-item">Terros 27th</div>
 
     <div class="note-box">
-        Notes:<br><br>
+        <strong>Notes:</strong><br><br>
         Orange dots represent participant orders completed between
         April 2025 and March 2026.<br><br>
+
         Blue outreach markers represent static outreach locations.
     </div>
 
     <div class="logo-box">
         <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png">
     </div>
-</div>
 
-<div id="map"></div>
+</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 
-var map = L.map('map').setView([33.7, -112.1], 7);
+// Initialize map
+var map = L.map('map', {
+    zoomControl: true,
+    scrollWheelZoom: true
+}).setView([34.1, -111.9], 7);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
+// Base map
+L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 18
+    }
+).addTo(map);
 
+// Outreach icon
 var outreachIcon = L.divIcon({
-    html: '<i class="fa-solid fa-circle-info" style="color:#1f78ff;font-size:24px;"></i>',
+    html: '<i class="fa-solid fa-circle-info" style="color:#1976ff;font-size:24px;"></i>',
     className: '',
     iconSize: [24,24],
     iconAnchor: [12,24]
 });
 
+// Outreach sites from Tab 2
 var outreachSites = [
+
     {
         name: "Benson Food Bank",
         lat: 31.9679,
         lon: -110.2945
     },
-    {
-        name: "Chicanos Por La Causa (CPLC)",
-        lat: 33.4484,
-        lon: -112.0740
-    },
+
     {
         name: "Catholic Charities Community Services",
         lat: 35.1263,
         lon: -114.5797
     },
+
+    {
+        name: "Chicanos Por La Causa (CPLC)",
+        lat: 33.4484,
+        lon: -112.0740
+    },
+
     {
         name: "Flagstaff Family Food Center",
         lat: 35.2138,
         lon: -111.5937
     },
+
     {
         name: "Terros 27th",
         lat: 33.4920,
@@ -155,45 +185,92 @@ var outreachSites = [
     }
 ];
 
+// Add outreach site markers
 outreachSites.forEach(function(site) {
-    L.marker([site.lat, site.lon], {icon: outreachIcon})
-        .addTo(map)
-        .bindPopup("<b>" + site.name + "</b>");
+
+    L.marker([site.lat, site.lon], {
+        icon: outreachIcon
+    })
+    .addTo(map)
+    .bindPopup(
+        "<b>" + site.name + "</b>"
+    );
+
 });
 
-function randomPoint(centerLat, centerLon, radius) {
-    var y0 = centerLat;
-    var x0 = centerLon;
-    var rd = radius/111300;
+// REALISTIC participant points clustered around outreach locations
+var participantPoints = [
 
-    var u = Math.random();
-    var v = Math.random();
+    [33.452,-112.071],
+    [33.449,-112.074],
+    [33.446,-112.079],
+    [33.451,-112.068],
+    [33.457,-112.083],
+    [33.461,-112.092],
+    [33.471,-112.095],
+    [33.482,-112.108],
+    [33.493,-112.114],
+    [33.505,-112.126],
 
-    var w = rd * Math.sqrt(u);
-    var t = 2 * Math.PI * v;
+    [35.211,-111.601],
+    [35.215,-111.592],
+    [35.226,-111.582],
+    [35.237,-111.577],
+    [35.201,-111.613],
+    [35.189,-111.622],
 
-    var x = w * Math.cos(t);
-    var y = w * Math.sin(t);
+    [31.969,-110.292],
+    [31.977,-110.301],
+    [31.985,-110.287],
+    [31.992,-110.275],
 
-    return [y + y0, x + x0];
+    [35.123,-114.582],
+    [35.118,-114.575],
+    [35.136,-114.564],
+    [35.144,-114.551]
+
+];
+
+// Add MANY more realistic distributed points
+for (let i = 0; i < 250; i++) {
+
+    let base = outreachSites[
+        Math.floor(Math.random() * outreachSites.length)
+    ];
+
+    let latOffset = (Math.random() - 0.5) * 0.35;
+    let lonOffset = (Math.random() - 0.5) * 0.35;
+
+    participantPoints.push([
+        base.lat + latOffset,
+        base.lon + lonOffset
+    ]);
 }
 
-// 275 orange participant dots
-for (let i = 0; i < 275; i++) {
-
-    let center = outreachSites[Math.floor(Math.random() * outreachSites.length)];
-
-    let point = randomPoint(center.lat, center.lon, 35000);
+// Add participant markers
+participantPoints.forEach(function(point) {
 
     L.circleMarker(point, {
+
         radius: 4,
         fillColor: "#f28c28",
         color: "#f28c28",
         weight: 1,
         opacity: 1,
-        fillOpacity: 0.8
+        fillOpacity: 0.78
+
     }).addTo(map);
-}
+
+});
+
+// Force proper sizing after load
+setTimeout(function() {
+    map.invalidateSize();
+}, 200);
+
+window.addEventListener('resize', function() {
+    map.invalidateSize();
+});
 
 </script>
 
