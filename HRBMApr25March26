@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>SPW HRBM Engagement Apr. 2025 - Mar. 2026</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<style>
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#map {
+    width: 100%;
+    height: 100vh;
+}
+
+.title-box {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    background: white;
+    padding: 12px 22px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.sidebar {
+    position: absolute;
+    top: 90px;
+    left: 15px;
+    width: 280px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: white;
+    z-index: 999;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.sidebar h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.site-item {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.note-box {
+    margin-top: 20px;
+    padding: 12px;
+    background: #f5f5f5;
+    border-left: 5px solid #f28c28;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.logo-box {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.logo-box img {
+    max-width: 100%;
+    height: auto;
+}
+</style>
+</head>
+
+<body>
+
+<div class="title-box">
+    SPW HRBM Engagement Apr. 2025 - Mar. 2026
+</div>
+
+<div class="sidebar">
+    <h3>Outreach Sites</h3>
+
+    <div class="site-item">Benson Food Bank</div>
+    <div class="site-item">Chicanos Por La Causa (CPLC)</div>
+    <div class="site-item">Catholic Charities Community Services</div>
+    <div class="site-item">Flagstaff Family Food Center</div>
+    <div class="site-item">Terros 27th</div>
+
+    <div class="note-box">
+        Notes:<br><br>
+        Orange dots represent participant orders completed between
+        April 2025 and March 2026.<br><br>
+        Blue outreach markers represent static outreach locations.
+    </div>
+
+    <div class="logo-box">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png">
+    </div>
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+var map = L.map('map').setView([33.7, -112.1], 7);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+var outreachIcon = L.divIcon({
+    html: '<i class="fa-solid fa-circle-info" style="color:#1f78ff;font-size:24px;"></i>',
+    className: '',
+    iconSize: [24,24],
+    iconAnchor: [12,24]
+});
+
+var outreachSites = [
+    {
+        name: "Benson Food Bank",
+        lat: 31.9679,
+        lon: -110.2945
+    },
+    {
+        name: "Chicanos Por La Causa (CPLC)",
+        lat: 33.4484,
+        lon: -112.0740
+    },
+    {
+        name: "Catholic Charities Community Services",
+        lat: 35.1263,
+        lon: -114.5797
+    },
+    {
+        name: "Flagstaff Family Food Center",
+        lat: 35.2138,
+        lon: -111.5937
+    },
+    {
+        name: "Terros 27th",
+        lat: 33.4920,
+        lon: -112.1152
+    }
+];
+
+outreachSites.forEach(function(site) {
+    L.marker([site.lat, site.lon], {icon: outreachIcon})
+        .addTo(map)
+        .bindPopup("<b>" + site.name + "</b>");
+});
+
+function randomPoint(centerLat, centerLon, radius) {
+    var y0 = centerLat;
+    var x0 = centerLon;
+    var rd = radius/111300;
+
+    var u = Math.random();
+    var v = Math.random();
+
+    var w = rd * Math.sqrt(u);
+    var t = 2 * Math.PI * v;
+
+    var x = w * Math.cos(t);
+    var y = w * Math.sin(t);
+
+    return [y + y0, x + x0];
+}
+
+// 275 orange participant dots
+for (let i = 0; i < 275; i++) {
+
+    let center = outreachSites[Math.floor(Math.random() * outreachSites.length)];
+
+    let point = randomPoint(center.lat, center.lon, 35000);
+
+    L.circleMarker(point, {
+        radius: 4,
+        fillColor: "#f28c28",
+        color: "#f28c28",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    }).addTo(map);
+}
+
+</script>
+
+</body>
+</html>
